@@ -12,10 +12,12 @@ namespace TorneioApp.Data
             _context = context;
             Torneios = new TorneioRepository(_context);
             Jogadores = new JogadorRepository(_context);
+            Partidas = new PartidaRepository(_context);
         }
 
         public ITorneioRepository Torneios { get; private set; }
         public IJogadorRepository Jogadores { get; private set; }
+        public IPartidaRepository Partidas { get; private set; }
         
         public int Complete()
         {

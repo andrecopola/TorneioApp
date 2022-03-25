@@ -18,17 +18,18 @@ namespace TorneioApp.Controllers
         [HttpGet]
         public IEnumerable<Jogador> Get()
         {
-            var jogadores = _unitOfWork.Jogadores.ObterTodos();
+            var jogadores = _unitOfWork.Jogadores.ObterTodos().OrderBy(j => j.Nome);
             return jogadores;
         }
 
+        [HttpGet("Adicionar")]
         public IActionResult Adicionar()
         {
             var torneios = _unitOfWork.Torneios.ObterTodos().ToList();
 
             var jogador = new Jogador
             {
-                Nome = "Paloma Márcia",
+                Nome = "Magnus Carlsen",
                 Torneios = torneios
             };
 

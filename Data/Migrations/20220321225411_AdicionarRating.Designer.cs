@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TorneioApp.Data;
 
@@ -11,9 +12,10 @@ using TorneioApp.Data;
 namespace TorneioApp.Migrations
 {
     [DbContext(typeof(TorneioAppDbContext))]
-    partial class TorneioAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220321225411_AdicionarRating")]
+    partial class AdicionarRating
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,9 +50,47 @@ namespace TorneioApp.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Jogadores");
+                });
+
+            modelBuilder.Entity("TorneioApp.Models.Partida", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Finalizada")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("JogadorBrancasId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("JogadorNegrasId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("ScoreJogadorBrancas")
+                        .HasColumnType("decimal(2,1)");
+
+                    b.Property<decimal>("ScoreJogadorNegras")
+                        .HasColumnType("decimal(2,1)");
+
+                    b.Property<Guid>("TorneioId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JogadorBrancasId");
+
+                    b.HasIndex("JogadorNegrasId");
+
+                    b.HasIndex("TorneioId");
+
+                    b.ToTable("Partida");
                 });
 
             modelBuilder.Entity("TorneioApp.Models.Torneio", b =>
@@ -61,6 +101,9 @@ namespace TorneioApp.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Finalizado")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -85,6 +128,38 @@ namespace TorneioApp.Migrations
                         .HasForeignKey("TorneiosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TorneioApp.Models.Partida", b =>
+                {
+                    b.HasOne("TorneioApp.Models.Jogador", "JogadorBrancas")
+                        .WithMany()
+                        .HasForeignKey("JogadorBrancasId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TorneioApp.Models.Jogador", "JogadorNegras")
+                        .WithMany()
+                        .HasForeignKey("JogadorNegrasId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TorneioApp.Models.Torneio", "Torneio")
+                        .WithMany("Partidas")
+                        .HasForeignKey("TorneioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("JogadorBrancas");
+
+                    b.Navigation("JogadorNegras");
+
+                    b.Navigation("Torneio");
+                });
+
+            modelBuilder.Entity("TorneioApp.Models.Torneio", b =>
+                {
+                    b.Navigation("Partidas");
                 });
 #pragma warning restore 612, 618
         }

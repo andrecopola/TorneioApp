@@ -11,6 +11,11 @@ namespace TorneioApp.Models
         [MaxLength(50)]
         public string Nome { get; set; } = string.Empty;
 
+        [MaxLength(100)]
+        public string PerfilChessCom { get; set; } = string.Empty;
+
+        public short Rating { get; set; } = 0;
+
         public List<Torneio> Torneios { get; set; } = new List<Torneio>();
     }
 }

@@ -17,15 +17,17 @@ export class ListarJogadores extends Component {
       <table className='table table-striped' aria-labelledby="tabelLabel">
         <thead>
           <tr>
-            <th>Jogadores</th>
+            <th>Nome</th>
+            <th>Perfil Chess.com</th>
           </tr>
         </thead>
         <tbody>
             {jogadores.map(jogador =>
-                <tr key={jogador.Id}>
-                    <td>{jogador.Nome}</td>
-            </tr>
-          )}
+                <tr key={jogador.id}>
+                    <td>{jogador.nome}</td>
+                    <td>{jogador.perfilChessCom}</td>
+                </tr>
+            )}
         </tbody>
       </table>
     );

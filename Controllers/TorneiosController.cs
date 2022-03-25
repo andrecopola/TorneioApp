@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TorneioApp.Data;
 using TorneioApp.Models;
+using TorneioApp.ListModels;
 
 namespace TorneioApp.Controllers
 {
+    [ApiController]
+    [Route("[controller]")]
     public class TorneiosController : Controller
     {
         private IUnitOfWork _unitOfWork;
@@ -13,24 +16,31 @@ namespace TorneioApp.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public ActionResult Index()
+        [HttpGet]
+        public IEnumerable<TorneioListModel> Index()
         {
-            var torneios = _unitOfWork.Torneios.ObterTodos().ToList();
+            var torneios = _unitOfWork.Torneios.ObterTodos();
 
-            return Ok(torneios);
-        }
-
-        public IActionResult Adicionar()
-        {
-            var torneio = new Torneio
+            return torneios.Select(t => new TorneioListModel
             {
-                Nome = "Torneio 03"
-            };
-
-            _unitOfWork.Torneios.Adicionar(torneio);
-            _unitOfWork.Complete();
-
-            return Ok();
+                Nome = t.Nome,
+                Data = t.Data.ToString("d/MM/yy"),
+                Status = t.Status
+            });
         }
+
+        //[HttpGet("Adicionar")]
+        //public IActionResult Adicionar()
+        //{
+        //    var torneio = new Torneio
+        //    {
+        //        Nome = "Torneio 03"
+        //    };
+
+        //    _unitOfWork.Torneios.Adicionar(torneio);
+        //    _unitOfWork.Complete();
+
+        //    return Ok();
+        //}
     }
 }

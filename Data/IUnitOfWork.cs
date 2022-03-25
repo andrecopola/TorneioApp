@@ -7,6 +7,7 @@ namespace TorneioApp.Data
     {
         ITorneioRepository Torneios { get; }
         IJogadorRepository Jogadores { get; }
+        IPartidaRepository Partidas { get; }
         int Complete();
     }
 }
